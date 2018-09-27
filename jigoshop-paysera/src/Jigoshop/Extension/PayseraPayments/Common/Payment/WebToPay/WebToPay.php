@@ -26,6 +26,9 @@
  * @link       http://www.webtopay.com/
  */
 
+namespace Jigoshop\Extension\PayseraPayments\Common\Payment\WebToPay;
+
+use Jigoshop\Exception;
 
 /**
  * Contains static methods for most used scenarios.
