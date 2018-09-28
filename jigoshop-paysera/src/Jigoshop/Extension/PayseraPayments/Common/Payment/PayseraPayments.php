@@ -42,6 +42,8 @@ class PayseraPayments implements Method3
 
 	public function __construct(Options $options, CartServiceInterface $cartService, OrderServiceInterface $orderService, Messages $messages)
 	{
+
+
 		$this->options = $options;
 		$this->messages = $messages;
 		$this->cartService = $cartService;
@@ -261,17 +263,20 @@ class PayseraPayments implements Method3
 				fclose($fd);
 			} */
 
+			try {
+				$response = WebToPay::checkResponse($_POST, array('projectid' => self::$settings["paysera_project_id"], 'sign_password' => self::$settings["paysera_project_password"]));
 
-			$response = WebToPay::checkResponse($_POST, array('projectid' => self::$settings["paysera_project_id"], 'sign_password' => self::$settings["paysera_project_password"]));
+				$orderID = strip_tags((int)$response['orderid']);
 
-			$orderID = strip_tags((int)$response['orderid']);
-			$order = $this->orderService->find($orderID);
-			$status = \Jigoshop\Helper\Order::getStatusAfterCompletePayment($order);
-			$order->setStatus($status, __('Payment Completed.'));
-			$this->orderService->save($order);
+				$order = $this->orderService->find($orderID);
+				$status = \Jigoshop\Helper\Order::getStatusAfterCompletePayment($order);
+				$order->setStatus($status, __('Payment Completed.'));
+				$this->orderService->save($order);
+				exit("OK");
 
-				//logg('----------------------------------ok');
-			exit;
+			} catch (Exception $e) {
+				exit('failed.' . $e->getMessage());
+			}
 		}
 
 	}
