@@ -249,20 +249,6 @@ class PayseraPayments implements Method3
 	public function checkResponseFromHostedPayment()
 	{
 		if (isset($_POST['ss1'])) {
-
-
-			/* function logg($msg)
-			{  
-				// open file 
-				$fd = fopen($_SERVER['DOCUMENT_ROOT'] . '/log.txt', "a"); 
-				// append date/time to message 
-				$str = "[" . date("Y/m/d h:i:s", time()) . "] " . $msg;  
-				// write string 
-				fwrite($fd, $str . "\n"); 
-				// close file 
-				fclose($fd);
-			} */
-
 			try {
 				$response = WebToPay::checkResponse($_POST, array('projectid' => self::$settings["paysera_project_id"], 'sign_password' => self::$settings["paysera_project_password"]));
 
